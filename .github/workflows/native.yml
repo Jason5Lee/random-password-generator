@@ -21,17 +21,17 @@ jobs:
           arch: 'amd64'
       - run: java -version
       - run: gu install native-image
-      - name: Creates shadowJar
-        run: ./gradlew shadowJar
+      - name: Shadow jar
+        run: ./gradlew --no-daemon shadowJar
       - name: Create Native Image
         shell: bash
         run: |
-          native-image -jar build/libs/rpg-0.1-all.jar rpg-${{ matrix.os }}
+          native-image --initialize-at-build-time --no-fallback -jar ./build/libs/rpg-0.1-all.jar rpg-${{ matrix.os }}
       - name: Publish artifact
         uses: actions/upload-artifact@master
         with:
           name: rpg-${{ matrix.os }}
-          path: .
+          path: rpg-${{ matrix.os }}
 
 #  build-windows:
 #    runs-on: ${{ matrix.os }}
